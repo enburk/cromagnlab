@@ -1,24 +1,20 @@
 #pragma once
-#include "../auxs/gui_widget_console.h"
-#include "../auxs/gui_widget_text_editor.h"
+#include "source.h"
 using namespace std::literals::chrono_literals;
-using namespace pix;
-using gui::widget;
 
 struct App:
 widget<App>
 {
-    struct topic
-    {
-        str text;
-        str kind;
-    };
+    gui::canvas canvas;
+    sourcer sourcers[2];
+    int active = 0;
 
-    array<topic> topics;
+    array<source> sources;
 
-    gui::console console;
     gui::property<gui::time> timer;
     gui::time lapse;
+
+    App() { skin = "gray+"; }
 
     void on_change (void* what) override
     {
@@ -32,15 +28,11 @@ widget<App>
             int h = gui::metrics::text::height*12/7;
             int d = gui::metrics::line::width * 6;
 
-            console.coord = XYWH(W/2, 0, W/3, H);
-            console.page.alignment = XY{ pix::left, pix::top };
-            console.page.style = pix::text::style{
-                sys::font{"Consolas",
-                gui::metrics::text::height*2},
-                RGBA::white};
-        }
-        if (what == &skin)
-        {
+            canvas.color = RGBA::black;
+            canvas.coord = XYWH(0, 0, W, H);
+
+            sourcers[0].coord = XYWH(W/2, 0, W/2, H);
+            sourcers[1].coord = XYWH(W/2, 0, W/2, H);
         }
 
         if (timer.now == gui::time())
@@ -49,22 +41,20 @@ widget<App>
 
         if (what == &timer)
         {
-            if (topics.empty())
-                scan();
-
-            if (topics.empty())
-                return;
+            if (sources.empty()) scan();
+            if (sources.empty()) return;
 
             if (lapse < gui::time::now)
             {
-                auto topic = topics[aux::random(0, topics.size()-1)];
+                auto source = sources[aux::random(0, sources.size() - 1)];
 
-                console.clear();
-                console << doc::html::encoded(topic.text);
+                sourcers[active] = source;
+                sourcers[active].show(1s); active = (active + 1) % 2;
+                sourcers[active].hide(1s);
 
                 lapse = gui::time::now;
                 lapse.ms += 1000 + 20*
-                    topic.text.size();
+                    source.text.size();
             }
         }
     }
@@ -88,8 +78,8 @@ widget<App>
             }
             if (is_regular_file(path))
             {
-                topic topic;
-                topic.kind = path.extension().string();
+                source source;
+                source.kind = path.extension().string();
                 str s;
                 {
                     std::ifstream stream(path); s = std::string{(
@@ -101,7 +91,7 @@ widget<App>
                 if (s.starts_with("\xEF" "\xBB" "\xBF"))
                     s.upto(3).erase(); // UTF-8 BOM
 
-                auto ss = s.split_by("/*#####*/");
+                auto ss = s.split_by("/* {{{ */");
 
                 str title;
                 if (ss.size() > 0) {
@@ -110,13 +100,17 @@ widget<App>
 
                 for (str s : ss)
                 {
-                    topic.text = s;
-                    topics += topic;
+                    str meta, text;
+                    s.split_by("/* }}} */", meta, text);
+
+                    text.strip("\n");
+                    source.text = title;
+                    source.text += text;
+                    sources += source;
                 }
             }
         }
     }
-
 };
 
 sys::app<App> app("cromagnlab");

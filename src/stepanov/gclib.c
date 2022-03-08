@@ -1,6 +1,6 @@
 /* Alexander Stepanov: gclib, AT&T Bell Laboratories, 1987 */
 
-/*#####*/
+/* {{{ *//* }}} */
 
 void merge(register TYPE *begin1, 
            register TYPE *end1, 
@@ -19,7 +19,7 @@ void merge(register TYPE *begin1,
 
 }
 
-/*#####*/
+/* {{{ *//* }}} */
 
 TYPE *minimum(register TYPE *begin, 
               register TYPE *end)
@@ -33,7 +33,7 @@ TYPE *minimum(register TYPE *begin,
   return index;
 }
 
-/*#####*/
+/* {{{ *//* }}} */
 
 TYPE *partition(register int (*predicate)(TYPE*), 
                 register TYPE *begin, 
@@ -61,7 +61,7 @@ TYPE *partition(register int (*predicate)(TYPE*),
     }
 }
 
-/*#####*/
+/* {{{ *//* }}} */
 
 TYPE *partition(REGISTER TYPE value, 
                 register TYPE *begin, 
@@ -89,7 +89,7 @@ TYPE *partition(REGISTER TYPE value,
     }
 }
 
-/*#####*/
+/* {{{ *//* }}} */
 
 TYPE *remove(register int (*predicate)(TYPE*), 
              register TYPE *begin, 
@@ -113,7 +113,7 @@ TYPE *remove(register int (*predicate)(TYPE*),
     }
 }
 
-/*#####*/
+/* {{{ *//* }}} */
 
 TYPE *remove(REGISTER TYPE value, 
              register TYPE *begin, 
@@ -137,7 +137,7 @@ TYPE *remove(REGISTER TYPE value,
     }
 }
 
-/*#####*/
+/* {{{ *//* }}} */
 
 TYPE *remove_duplicates(register TYPE *begin, 
                         register TYPE *end)
@@ -158,7 +158,7 @@ TYPE *remove_duplicates(register TYPE *begin,
   return m;
 }
       
-/*#####*/
+/* {{{ *//* }}} */
 
 void reverse(register TYPE *begin, 
              register TYPE *end)
@@ -171,7 +171,7 @@ void reverse(register TYPE *begin,
     }
 }
       
-/*#####*/
+/* {{{ *//* }}} */
 
 void rotate(ptrdiff_t number, 
             TYPE *begin, 
@@ -193,7 +193,7 @@ void rotate(ptrdiff_t number,
   reverse(begin + number, end);
 }
 
-/*#####*/
+/* {{{ *//* }}} */
 
 TYPE *search(register TYPE *begin1, 
              TYPE *end1, 
@@ -228,7 +228,7 @@ TYPE *search(register TYPE *begin1,
   return begin2;
 }
 
-/*#####*/
+/* {{{ *//* }}} */
 
 void select(ptrdiff_t nth, 
             TYPE *begin, 
@@ -268,7 +268,7 @@ void select(ptrdiff_t nth,
       }
 }
 
-/*#####*/
+/* {{{ *//* }}} */
 
 TYPE *set_union(register TYPE *begin1, 
                 register TYPE *end1, 
@@ -295,7 +295,7 @@ TYPE *set_union(register TYPE *begin1,
   return result;
 }
 
-/*#####*/
+/* {{{ *//* }}} */
 
 void shuffle(register TYPE *begin, 
              register TYPE *end)
@@ -311,7 +311,7 @@ void shuffle(register TYPE *begin,
     }    
 }
 
-/*#####*/
+/* {{{ *//* }}} */
 
 static TYPE *ordered_partition(register TYPE *begin, 
                                register TYPE *end) 
@@ -339,7 +339,7 @@ static TYPE *ordered_partition(register TYPE *begin,
     }
 }
 
-/*#####*/
+/* {{{ *//* }}} */
 
 static void quicksort_loop(register TYPE *begin, 
                            register TYPE *end)
@@ -368,7 +368,7 @@ void sort(TYPE *begin,
   insertion_sort(begin, end);
 }
 
-/*#####*/
+/* {{{ *//* }}} */
 
 TYPE *stable_partition(TYPE value,  
                        TYPE *begin, 
@@ -394,7 +394,7 @@ TYPE *stable_partition(TYPE value,
     return end;
 }
 
-/*#####*/
+/* {{{ *//* }}} */
 
 TYPE *stable_remove(register int (*predicate)(TYPE*), 
                     register TYPE *begin, 
@@ -417,7 +417,7 @@ TYPE *stable_remove(register int (*predicate)(TYPE*),
   return m;
 }
   
-/*#####*/
+/* {{{ *//* }}} */
 
 TYPE *stable_remove(REGISTER TYPE value, 
                     register TYPE *begin, 
@@ -440,7 +440,7 @@ TYPE *stable_remove(REGISTER TYPE value,
   return m;
 }
 
-/*#####*/
+/* {{{ *//* }}} */
 
 #include <malloc.h>
 
@@ -466,7 +466,7 @@ void stable_sort(TYPE *begin,
   free((char*)index);
 }
 
-/*#####*/
+/* {{{ *//* }}} */
 
 void substitute(REGISTER TYPE value, 
                 REGISTER TYPE new_value, 
@@ -478,7 +478,7 @@ void substitute(REGISTER TYPE value,
       *begin = new_value;
 }
 
-/*#####*/
+/* {{{ *//* }}} */
 
 TYPE *symmetric_difference(register TYPE *begin1, 
                            register TYPE *end1, 
@@ -503,7 +503,7 @@ TYPE *symmetric_difference(register TYPE *begin1,
   return result;
 }
 
-/*#####*/
+/* {{{ *//* }}} */
 
 TYPE *unique(register TYPE *begin, 
              register TYPE *end)
@@ -529,7 +529,7 @@ TYPE *unique(register TYPE *begin,
   return m + 1;
 }
       
-/*#####*/
+/* {{{ *//* }}} */
 
 TYPE *unique_copy(register TYPE *begin, 
                   register TYPE *end, 
@@ -547,7 +547,7 @@ TYPE *unique_copy(register TYPE *begin,
   return result + 1;
 }
       
-/*#####*/
+/* {{{ *//* }}} */
 
 TYPE *unique_copy(register int (*relation)(TYPE*, TYPE*), 
                   register TYPE *begin, 
