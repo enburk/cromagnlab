@@ -53,11 +53,11 @@ widget<App>
     void on_change_state (gui::button& button)
     {
         //console << button.text.text;
-        RGBA disabled = gui::palettes["gray"][7].first;
-        RGBA touched = gui::palettes["amber"][9].first;
-        RGBA hovered = gui::palettes["amber"][8].first;
-        RGBA active = gui::palettes["amber"][7].first;
-        RGBA normal = gui::palettes["gray"][3].first;
+        rgba disabled = gui::palettes["gray"][7].first;
+        rgba touched = gui::palettes["amber"][9].first;
+        rgba hovered = gui::palettes["amber"][8].first;
+        rgba active = gui::palettes["amber"][7].first;
+        rgba normal = gui::palettes["gray"][3].first;
         auto color = // order important
         not button.enabled  .now? disabled:
         button.enter_pressed.now? touched:
@@ -79,22 +79,22 @@ widget<App>
             int h = gui::metrics::text::height*12/7;
             int d = gui::metrics::line::width * 6;
 
-            canvas.color = RGBA::black;
-            canvas.coord = XYWH(0, 0, W, H);
+            canvas.color = rgba::black;
+            canvas.coord = xywh(0, 0, W, H);
 
-            console.coord = XYWH(0, 0, W/3, H-2*h);
+            console.coord = xywh(0, 0, W/3, H-2*h);
             console.scroll.x.mode = gui::scroll::mode::none;
             console.scroll.y.mode = gui::scroll::mode::none;
-            console.page.canvas.color = RGBA{};
-            console.page.color = RGBA::gray;
+            console.page.canvas.color = rgba{};
+            console.page.color = rgba::gray;
 
-            sourcers[0].coord = XYWH(W/2, 0, W/2, H);
-            sourcers[1].coord = XYWH(W/2, 0, W/2, H);
+            sourcers[0].coord = xywh(W/2, 0, W/2, H);
+            sourcers[1].coord = xywh(W/2, 0, W/2, H);
 
             auto button = [this, H, h](gui::button& butt, int x, int w = 0)
             {
                 if (w == 0) w = 2 * h;
-                butt.coord = XYWH(x*2*h, H-2*h, w, 2*h);
+                butt.coord = xywh(x*2*h, H-2*h, w, 2*h);
                 butt.text.coord = butt.coord.now.local();
                 butt.text.font = pix::font{"", h*6/6};
             };
@@ -260,4 +260,5 @@ sys::app<App> app("cromagnlab");
 #include "../auxs/windows_fonts.h"
 #include "../auxs/windows_images.h"
 #include "../auxs/windows_system.h"
+#include "../auxs/windows_render.h"
 #include "../auxs/windows_windows.h"

@@ -34,23 +34,23 @@ widget<sourcer>
         editor.view.cell.lines;
         editor.text = source.text; do {
         editor.page.style = pix::text::style{
-            sys::font{"Consolas", int(
+            pix::font{"Consolas", int(
             gui::metrics::text::height*k)},
-            RGBA::white};
+            rgba::white};
             k *= 0.9; }
             while (k > 0.9 and (
             lines.coord.now.h > coord.now.h or
             lines.coord.now.w > coord.now.w));
 
-        RGBA white  = gui::palettes["gray"][1].first;
-        RGBA black  = RGBA::black;
-        RGBA blue   = gui::palettes["blue"][4].first;
-        RGBA teal   = RGBA::teal;
-        RGBA purple = RGBA::purple;
-        RGBA navy   = gui::palettes["cyan"][5].first;
-        RGBA maroon = gui::palettes["orange"][8].first;
-        RGBA green  = RGBA::green;
-        RGBA red    = RGBA::red;
+        rgba white  = gui::palettes["gray"][1].first;
+        rgba black  = rgba::black;
+        rgba blue   = gui::palettes["blue"][4].first;
+        rgba teal   = rgba::teal;
+        rgba purple = rgba::purple;
+        rgba navy   = gui::palettes["cyan"][5].first;
+        rgba maroon = gui::palettes["orange"][8].first;
+        rgba green  = rgba::green;
+        rgba red    = rgba::red;
 
         using pix::text::style_index;
         auto s = editor.view.style.now;
@@ -85,8 +85,8 @@ widget<sourcer>
             int w = gui::metrics::text::height*25;
             int h = gui::metrics::text::height*12/7;
 
-            editor.coord = XYWH(0, h, W, H-h);
-            editor.page.alignment = XY{ pix::left, pix::top };
+            editor.coord = xywh(0, h, W, H-h);
+            editor.page.alignment = xy{ pix::left, pix::top };
             editor.scroll.x.mode = gui::scroll::mode::none;
             editor.virtual_space = true;
             editor.view.wordwrap = false;
