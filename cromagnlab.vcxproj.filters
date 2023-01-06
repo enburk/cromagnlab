@@ -5,5 +5,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source.h" />
+    <ClInclude Include="content.h" />
+    <ClInclude Include="abc.h" />
   </ItemGroup>
 </Project>

@@ -1,27 +1,26 @@
 #pragma once
 #include <format>
-#include "source.h"
-using namespace std::literals::chrono_literals;
+#include "content.h"
 
 struct App:
 widget<App>
 {
-    gui::canvas canvas;
+    canvas canvas;
     sourcer sourcers[2];
     int active = 0;
 
-    gui::button play, stop;
-    gui::button prev, next;
-    gui::button slow, coef, fast;
-    gui::button cons;
+    console console;
+    content content;
 
-    gui::console console;
+    button play, stop;
+    button prev, next;
+    button slow, coef, fast;
+    button cons, cont;
 
-    array<source> sources;
     array<int> undo, redo;
     int current = -1;
 
-    gui::property<gui::time> timer;
+    property<gui::time> timer;
     gui::time lapse;
 
     App()
@@ -37,15 +36,21 @@ widget<App>
         button(stop, (char*)(u8"\u23F8"));
         button(prev, (char*)(u8"\u23EE"));
         button(next, (char*)(u8"\u23ED"));
-        button(cons, (char*)(u8"\u2637"));
+        button(cons, (char*)(u8"\u2630"));
+        button(cont, (char*)(u8"\u2637"));
         button(slow, "slower");
         button(fast, "faster");
         button(coef, "1.0");
+        slow.repeat_delay = 0ms;
+        fast.repeat_delay = 0ms;
         slow.repeat_lapse = 16ms;
         fast.repeat_lapse = 16ms;
         slow.repeating = true;
         fast.repeating = true;
         coef.enabled = false;
+        cons.kind = gui::button::toggle;
+        cont.kind = gui::button::toggle;
+        content.hide();
         console.hide();
         play.hide();
     }
@@ -82,11 +87,13 @@ widget<App>
             canvas.color = rgba::black;
             canvas.coord = xywh(0, 0, W, H);
 
+            content.coord = xywh(0, 0, W, H);
             console.coord = xywh(0, 0, W/3, H-2*h);
             console.scroll.x.mode = gui::scroll::mode::none;
             console.scroll.y.mode = gui::scroll::mode::none;
-            console.page.canvas.color = rgba{};
-            console.page.color = rgba::gray;
+            console.page.canvas.color = gui::palettes["gray"][9].first;
+            console.page.color = rgba::white;
+            console.page.alpha = 192;
 
             sourcers[0].coord = xywh(W/2, 0, W/2, H);
             sourcers[1].coord = xywh(W/2, 0, W/2, H);
@@ -106,18 +113,15 @@ widget<App>
             button(coef, 6);
             button(fast, 7, h*4);
             button(cons, 12);
+            button(cont, 13);
         }
 
-        if (what == &cons)
-        {
-            if (console.alpha.to == 0)
-                console.show(); else
-                console.hide();
-        }
+        if (what == &cons) console.show(cons.on.now);
+        if (what == &cont) content.show(cont.on.now);
         if (what == &slow)
         {
             str s = coef.text.text;
-            auto k = std::atof(s.c_str());
+            double k = std::stof(s);
             if (k > 0.19) {
                 k -= 0.1;
                 coef.text.text =
@@ -127,7 +131,7 @@ widget<App>
         if (what == &fast)
         {
             str s = coef.text.text;
-            auto k = std::atof(s.c_str());
+            double k = std::stof(s);
             if (k < 9.81) {
                 k += 0.1;
                 coef.text.text =
@@ -165,8 +169,8 @@ widget<App>
 
         if (what == &timer)
         {
-            if (sources.empty()) scan();
-            if (sources.empty()) return;
+            if (content.sources.empty()) content.scan();
+            if (content.sources.empty()) return;
 
             if (lapse < gui::time::now
             and play.alpha.now == 0)
@@ -179,12 +183,12 @@ widget<App>
                 undo += current;
 
             if (redo.empty())
-                redo += aux::random(0, sources.size() - 1);
+                redo += aux::random(0, content.sources.size() - 1);
 
             current = redo.back();
             redo.pop_back();
 
-            auto source = sources[current];
+            auto source = content.sources[current];
 
             sourcers[active] = source;
             sourcers[active].show(1s); active = (active + 1) % 2;
@@ -199,59 +203,6 @@ widget<App>
         }
 
         prev.enabled = not undo.empty();
-    }
-
-    void scan (std::filesystem::path dir = {})
-    {
-        using namespace std::filesystem;
-
-        if (dir == path{}) dir = current_path() / "src";
-
-        for (directory_iterator next(dir), end; next != end; ++next)
-        {
-            path path = next->path();
-            if (is_directory (path)) {
-                str name = path.filename().string();
-                if (name.starts_with(".")
-                ||  name.starts_with("_")
-                ||  name == "packages")
-                continue;
-                scan(path);
-            }
-            if (is_regular_file(path))
-            {
-                source source;
-                source.kind = path.extension().string();
-                str s;
-                {
-                    std::ifstream stream(path); s = std::string{(
-                    std::istreambuf_iterator<char>(stream)),
-                    std::istreambuf_iterator<char>()};
-                }
-                s.replace_all("\r\n", "\n");
-                s.replace_all("\r", "\n");
-                if (s.starts_with("\xEF" "\xBB" "\xBF"))
-                    s.upto(3).erase(); // UTF-8 BOM
-
-                auto ss = s.split_by("/* {{{ */");
-
-                str title;
-                if (ss.size() > 0) {
-                    title = ss.front();
-                    ss.erase(0); }
-
-                for (str s : ss)
-                {
-                    str meta, text;
-                    s.split_by("/* }}} */", meta, text);
-
-                    text.strip("\n");
-                    source.text = title;
-                    source.text += text;
-                    sources += source;
-                }
-            }
-        }
     }
 };
 

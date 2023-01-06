@@ -1,3 +1,8 @@
+-- David R. Musser and Alexander A. Stepanov:
+-- Ada Generic Library: Linear List Processing Packages, 1989
+
+/* {{{ *//* }}} */
+
   package Double_Ended_Lists is
  
     type Del is limited private;
@@ -83,3 +88,30 @@
     end Split;
 
   end Double_Ended_Lists;
+
+/* {{{ *//* }}} */
+
+function Delete_Duplicates(S : Cell)
+	   return Cell is 
+  Tail, To_Be_Done, I : Cell := S;
+begin
+  if not Is_End(To_Be_Done) then
+	Advance(To_Be_Done);
+	while not Is_End(To_Be_Done) loop
+	  I := S;
+	  while I /= To_Be_Done and then not Test(I, To_Be_Done) loop
+		Advance(I);
+	  end loop;
+	  if I = To_Be_Done then
+		Tail := To_Be_Done;
+		Advance(To_Be_Done);
+	  else
+		I := To_Be_Done;
+		Advance(To_Be_Done);
+		Set_Next(Tail, To_Be_Done);
+		Free(I);
+	  end if;
+	end loop;
+  end if;
+  return S;
+end Delete_Duplicates;

@@ -145,6 +145,8 @@
     <ClCompile Include="!main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="abc.h" />
+    <ClInclude Include="content.h" />
     <ClInclude Include="source.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

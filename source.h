@@ -1,9 +1,5 @@
 #pragma once
-#include "../auxs/gui_widget_console.h"
-#include "../auxs/gui_widget_text_editor.h"
-#include "../ae/proto-studio/doc_cpp_model.h"
-using namespace pix;
-using gui::widget;
+#include "abc.h"
 
 struct source
 {
@@ -14,7 +10,7 @@ struct sourcer:
 widget<sourcer>
 {
     gui::text::editor editor;
-    gui::property<gui::time> timer;
+    property<gui::time> timer;
     gui::time lapse;
 
     doc::cpp ::model cpp;
