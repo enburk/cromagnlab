@@ -66,7 +66,7 @@ widget<App>
         auto color = // order important
         not button.enabled  .now? disabled:
         button.enter_pressed.now? touched:
-        button.mouse_pressed.now? touched:
+        button.mouse_clicked.now? touched:
         button.mouse_hover  .now? hovered:
         button.on.now? active: normal;
         button.text.color = color;

@@ -1,10 +1,10 @@
 #pragma once
 #include "../auxs/gui_widget_image.h"
-#include "../auxs/gui_widget_player.h"
 #include "../auxs/gui_widget_button.h"
 #include "../auxs/gui_widget_text_editline.h"
 #include "../auxs/gui_widget_text_editor.h"
 #include "../auxs/gui_widget_console.h"
+#include "../auxs/sfx_media_vudio.h"
 #include "../auxs/doc_html_model.h"
 #include "../auxs/doc_html_utils.h"
 #include "../auxs/dox_cpp_model.h"

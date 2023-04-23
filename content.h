@@ -61,7 +61,7 @@ widget<content>
                 if (s.starts_with("\xEF" "\xBB" "\xBF"))
                     s.upto(3).erase(); // UTF-8 BOM
 
-                auto ss = s.split_by("/* {{{ */");
+                array<str> ss = s.split_by("/* {{{ */");
 
                 str title;
                 if (ss.size() > 0) {

@@ -27,7 +27,7 @@ widget<sourcer>
 
         double k = 2.0;
         auto& lines =
-        editor.view.cell.lines;
+        editor.view.cell.box;
         editor.text = source.text; do {
         editor.page.style = pix::text::style{
             pix::font{"Consolas", int(
